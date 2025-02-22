@@ -1,0 +1,666 @@
+{
+	"info": {
+		"_postman_id": "1100625e-b7b6-471e-a548-c44bf8a5b2b3",
+		"name": "Galaxy project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17757216"
+	},
+	"item": [
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Crear Books",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(201);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Tiene Titulo y autor\", function () {\r",
+									"        pm.response.to.have.jsonBody(\"title\");\r",
+									"        pm.response.to.have.jsonBody(\"author\");\r",
+									"})\r",
+									"\r",
+									"pm.test(\"id creado Ok\", function () {\r",
+									"        pm.expect(pm.response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"})\r",
+									"\r",
+									"const responsejson = pm.response.json();\r",
+									"pm.collectionVariables.set(\"idBooks\",responsejson.id);\r",
+									"console.log(\"id book created: \" + responsejson.id)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "G-TOKEN",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"El retrato de dorian grey\",\r\n    \"author\":\"Oscar Wilde\",\r\n    \"isbn\":\"5591201657\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/books",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Books",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Id \"+ pm.collectionVariables.get(\"idBooks\"), function () {\r",
+									"        pm.response.to.have.jsonBody(\"id\", pm.collectionVariables.get(\"idBooks\"));\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{BasicToken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "G-TOKEN",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"Fuego y Sanche\",\r\n    \"author\":\"George R. R. Martin\",\r\n    \"isbn\":\"5591201657\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/books/{{idBooks}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"books",
+								"{{idBooks}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar Books",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(200);\r",
+									"})\r",
+									"\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "G-TOKEN",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/books/{{idBooks}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"books",
+								"{{idBooks}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Books",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(204);\r",
+									"})\r",
+									"\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{BasicToken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "G-TOKEN",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/books/{{idBooks}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"books",
+								"{{idBooks}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Repositores",
+			"item": [
+				{
+					"name": "Consultar Repositorios",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(200);\r",
+									"})\r",
+									"\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{RepositoriPublic}}",
+							"host": [
+								"{{RepositoriPublic}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta repositorio gian",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RepositoriGian}}",
+							"host": [
+								"{{RepositoriGian}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Crear Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(201);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Tiene Titulo y autor\", function () {\r",
+									"        pm.response.to.have.jsonBody(\"email\");\r",
+									"        pm.response.to.have.jsonBody(\"firstName\");\r",
+									"        pm.response.to.have.jsonBody(\"lastName\");\r",
+									"})\r",
+									"\r",
+									"pm.test(\"id creado Ok\", function () {\r",
+									"        pm.expect(pm.response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"})\r",
+									"\r",
+									"const responsejson = pm.response.json();\r",
+									"pm.collectionVariables.set(\"idUsers\",responsejson.id);\r",
+									"console.log(\"id Users created: \" + responsejson.id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "G-TOKEN",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"testing@testing.com\",\r\n    \"firstName\":\"{{$randomFirstName}}\",\r\n    \"lastName\":\"{{$randomLastName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Id \"+ pm.collectionVariables.get(\"idBooks\"), function () {\r",
+									"        pm.response.to.have.jsonBody(\"id\", pm.collectionVariables.get(\"idUsers\"));\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"})\r",
+									"\r",
+									"const responsejson = pm.response.json();\r",
+									"console.log(\"email: \" + responsejson.email)\r",
+									"console.log(\"Nombre: \" + responsejson.firstName + \" \" + responsejson.lastName)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{BasicToken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "G-TOKEN",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"firstName\":\"{{$randomFirstName}}\",\r\n    \"lastName\":\"{{$randomLastName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/{{idUsers}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"{{idUsers}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar Users",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(200);\r",
+									"})\r",
+									"\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "G-TOKEN",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/users/{{idUsers}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"{{idUsers}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta Ok\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(204);\r",
+									"})\r",
+									"\r",
+									"\r",
+									"pm.test(\"Tiempo Ok\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{BasicToken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "G-TOKEN",
+								"value": "{{Token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/users/{{idUsers}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"{{idUsers}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "Token",
+			"value": "ROM831ESV",
+			"type": "string"
+		},
+		{
+			"key": "BasicToken",
+			"value": "admin",
+			"type": "string"
+		},
+		{
+			"key": "idBooks",
+			"value": "20",
+			"type": "string"
+		},
+		{
+			"key": "idUsers",
+			"value": ""
+		},
+		{
+			"key": "RepositoriPublic",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "RepositoriGian",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
